@@ -1,9 +1,36 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 'use client'
 import React, { useState, useEffect } from 'react';
-import { Scroll, MapPin, Sword, Shield, Coins, Heart, Award, Zap, UserPlus, Users } from 'lucide-react';
+import { Scroll, MapPin, Sword,  Coins, Heart, Award, Zap, } from 'lucide-react';
+
+
+type LocationKey = 'Acampamento Base' | 'Montanhas' | 'Portal';
+
+interface Location {
+  description: string;
+  options: string[];
+}
+
+
+interface Player {
+  name: string;
+  level: number;
+  hp: number;
+  maxHp: number;
+  exp: number;
+  skills: string[];
+  tokenStream: number;
+}
 
 const MissaoFluxo = () => {
-  const [gameState, setGameState] = useState({
+  const [gameState, setGameState] = useState < {
+    player: Player; 
+    location: LocationKey;
+    messages: string[];
+    inventory: any[]; 
+    guild: any | null; 
+  }>({
     player: {
       name: 'Aventureiro',
       level: 1,
@@ -19,7 +46,7 @@ const MissaoFluxo = () => {
     guild: null,
   });
 
-  const locations = {
+  const locations: Record<LocationKey, Location> = {
     'Acampamento Base': {
       description: 'Um refúgio seguro nas terras baixas. Daqui você pode ver as montanhas derretendo.',
       options: ['Explorar Montanhas', 'Treinar Habilidades', 'Gerenciar Fluxos', 'Descansar'],
@@ -34,14 +61,14 @@ const MissaoFluxo = () => {
     },
   };
 
-  const addMessage = (message) => {
+  const addMessage = (message: string) => {
     setGameState(prev => ({
       ...prev,
       messages: [...prev.messages, message],
     }));
   };
 
-  const handleAction = (action) => {
+  const handleAction = (action: string) => {
     switch (action) {
       case 'Explorar Montanhas':
         setGameState(prev => ({ ...prev, location: 'Montanhas' }));
